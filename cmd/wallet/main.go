@@ -1,16 +1,14 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/parviz-yu/digital-wallet/internal/config"
+	"github.com/parviz-yu/digital-wallet/pkg/logger"
 )
 
 func main() {
 	cfg := config.MustLoad()
-	fmt.Println(cfg)
 
-	// init logger
+	log := logger.NewLogger(cfg.Env)
 
 	// init storage
 
