@@ -11,7 +11,7 @@ import (
 type Config struct {
 	Env        string `yaml:"env" env-default:"local"`
 	HTTPServer `yaml:"http_server"`
-	Postgres
+	Database
 }
 
 type HTTPServer struct {
@@ -21,15 +21,15 @@ type HTTPServer struct {
 	IdleTimeout time.Duration `yaml:"idle_timeout" env-default:"45s"`
 }
 
-type Postgres struct {
-	Host     string `env:"POSTGRES_HOST" env-default:"localhost"`
-	Port     string `env:"POSTGRES_PORT" env-default:"5432"`
-	User     string `env:"POSTGRES_USER" env-default:"postgres"`
-	Password string `env:"POSTGRES_PASSWORD" env-required:"true"`
-	Database string `env:"POSTGRES_DATABASE" env-default:"digital_wallet"`
+type Database struct {
+	PostgresHost     string `env:"POSTGRES_HOST" env-default:"localhost"`
+	PostgresPort     string `env:"POSTGRES_PORT" env-default:"5432"`
+	PostgresUser     string `env:"POSTGRES_USER" env-default:"postgres"`
+	PostgresPassword string `env:"POSTGRES_PASSWORD" env-required:"true"`
+	PostgresDatabase string `env:"POSTGRES_DATABASE" env-default:"postgres"`
 }
 
-func MustLoad() *Config {
+func MustLoad() Config {
 	configPath := os.Getenv("CONFIG_PATH")
 	if configPath == "" {
 		log.Fatal("CONFIG_PATH is not set")
@@ -44,5 +44,5 @@ func MustLoad() *Config {
 		log.Fatalf("can't read config: %s", err)
 	}
 
-	return &cfg
+	return cfg
 }
