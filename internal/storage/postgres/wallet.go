@@ -43,9 +43,9 @@ func (r *walletRepo) CheckBalance(ctx context.Context, userID string) (*models.W
 	const fn = "storage.postgres.CheckBalance"
 
 	wllt := &models.Wallet{}
-	query := "SELECT balance, type FROM wallets WHERE user_id = $1"
+	query := "SELECT id, balance, type FROM wallets WHERE user_id = $1"
 
-	err := r.db.QueryRowContext(ctx, query, userID).Scan(&wllt.Balance, &wllt.Type)
+	err := r.db.QueryRowContext(ctx, query, userID).Scan(&wllt.ID, &wllt.Balance, &wllt.Type)
 	if errors.Is(err, sql.ErrNoRows) {
 		return nil, fmt.Errorf("%s: %w", fn, customerrors.ErrWalletNotFound)
 	}

@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/parviz-yu/digital-wallet/internal/config"
+	"github.com/parviz-yu/digital-wallet/internal/service"
 	"github.com/parviz-yu/digital-wallet/internal/storage/postgres"
 	"github.com/parviz-yu/digital-wallet/pkg/logger"
 )
@@ -21,7 +22,6 @@ func main() {
 		os.Exit(1)
 	}
 
-	// init services
+	svc := service.NewService(cfg, log, strg)
 
-	//
 }

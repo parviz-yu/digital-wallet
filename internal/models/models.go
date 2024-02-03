@@ -3,22 +3,23 @@ package models
 import "time"
 
 type Wallet struct {
+	ID      int
 	Balance int // smalles unit (diram)
 	Type    int
 }
 
 type Payment struct {
-	WalletID int
 	Amount   int // smalles unit (diram)
+	WalletID int
 }
 
 type WalletStatsRange struct {
-	WalletID  int
 	DateBegin time.Time
 	DateEnd   time.Time
+	WalletID  int
 }
 
-type WalletStat struct {
+type WalletStatResult struct {
 	Number int
 	Amount int
 }
@@ -26,4 +27,18 @@ type WalletStat struct {
 type Limit struct {
 	Name      string
 	MaxAmount int
+}
+
+type PaymentReq struct {
+	UserID string
+	Amount float64
+}
+
+type WalletResp struct {
+	Balance float64 `json:"balance"`
+}
+
+type WalletStatResp struct {
+	Number int     `json:"number"`
+	Amount float64 `json:"amount"`
 }

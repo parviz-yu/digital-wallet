@@ -44,7 +44,7 @@ func (r *txRepo) PutFunds(ctx context.Context, tx *sql.Tx, payment *models.Payme
 }
 
 // GetMonthlyStats calculates refills' stats of the speciefic month
-func (r *txRepo) GetMonthlyStats(ctx context.Context, statRange *models.WalletStatsRange) (*models.WalletStat, error) {
+func (r *txRepo) GetMonthlyStats(ctx context.Context, statRange *models.WalletStatsRange) (*models.WalletStatResult, error) {
 	const fn = "storage.postgres.MonthlyStats"
 
 	var (
@@ -52,7 +52,7 @@ func (r *txRepo) GetMonthlyStats(ctx context.Context, statRange *models.WalletSt
 		amount sql.NullInt64
 	)
 
-	result := &models.WalletStat{}
+	result := &models.WalletStatResult{}
 	query := `SELECT COUNT(amount) AS number, SUM(amount) AS total FROM transactions
 	WHERE wallet_id = $1 AND created_at BETWEEN $2 AND $3`
 

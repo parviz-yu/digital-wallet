@@ -22,6 +22,6 @@ type WalletRepoI interface {
 
 type TxRepoI interface {
 	BeginTx(ctx context.Context) (*sql.Tx, error)
-	GetMonthlyStats(ctx context.Context, statRange *models.WalletStatsRange) (*models.WalletStat, error)
+	GetMonthlyStats(ctx context.Context, statRange *models.WalletStatsRange) (*models.WalletStatResult, error)
 	PutFunds(ctx context.Context, tx *sql.Tx, payment *models.Payment) (int, error)
 }
