@@ -12,7 +12,8 @@ import (
 )
 
 type store struct {
-	db *sql.DB
+	db         *sql.DB
+	walletRepo *walletRepo
 }
 
 func NewStorage(ctx context.Context, cfg config.Config) (storage.StorageI, error) {
@@ -41,10 +42,15 @@ func NewStorage(ctx context.Context, cfg config.Config) (storage.StorageI, error
 
 func newStorage(db *sql.DB) *store {
 	return &store{
-		db: db,
+		db:         db,
+		walletRepo: newWalletRepo(db),
 	}
 }
 
 func (s *store) CloseDB() {
 	s.db.Close()
+}
+
+func (s *store) Wallet() storage.WalletRepoI {
+	return s.walletRepo
 }
