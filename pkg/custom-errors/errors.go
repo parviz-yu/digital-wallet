@@ -15,5 +15,5 @@ type ErrLimitExceeded struct {
 }
 
 func (e ErrLimitExceeded) Error() string {
-	return fmt.Sprintf("limit exceeded for %s — %d TJS", e.WalletType, e.MaxAmount/100)
+	return fmt.Sprintf("limit exceeded %d TJS", e.MaxAmount/100)
 }

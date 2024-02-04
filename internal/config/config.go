@@ -9,8 +9,9 @@ import (
 )
 
 type Config struct {
-	Env        string `yaml:"env" env-default:"local"`
-	HTTPServer `yaml:"http_server"`
+	SecretToket string `env:"SECRET_TOKEN" env-required:"true"`
+	Env         string `yaml:"env" env-default:"local"`
+	HTTPServer  `yaml:"http_server"`
 	Database
 }
 
