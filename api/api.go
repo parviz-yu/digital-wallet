@@ -13,7 +13,6 @@ func SetUpRouter(h *handlers.Handler, log logger.LoggerI) *chi.Mux {
 	router.Use(handlers.NewMWLogger(log))
 	router.Use(middleware.Recoverer)
 	router.Use(middleware.URLFormat)
-	router.Use(middleware.RequestID)
 	router.Use(handlers.AuthMiddlewareUserID)
 
 	router.Head("/api/v1/wallets", h.DoesWalletExists)

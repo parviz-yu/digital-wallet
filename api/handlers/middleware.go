@@ -54,9 +54,9 @@ func NewMWLogger(log logger.LoggerI) func(next http.Handler) http.Handler {
 				log,
 				logger.String("method", r.Method),
 				logger.String("path", r.URL.Path),
-				logger.String("remote_addr", r.RemoteAddr),
+				logger.String("remote_addr", r.Header.Get("X-Real-IP")),
 				logger.String("user_agent", r.UserAgent()),
-				logger.String("request_id", middleware.GetReqID(r.Context())),
+				logger.String("request_id", r.Header.Get("X-Request-Id")),
 			)
 			ww := middleware.NewWrapResponseWriter(w, r.ProtoMajor)
 
