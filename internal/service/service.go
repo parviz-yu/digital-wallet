@@ -71,7 +71,7 @@ func (s *service) GetWalletStats(ctx context.Context, userID string) (*models.Wa
 	statRange := &models.WalletStatsRange{
 		WalletID:  walledID,
 		DateBegin: monthStart(today),
-		DateEnd:   today,
+		DateEnd:   monthEnd(today),
 	}
 
 	monthlyStats, err := s.strg.Transaction().GetMonthlyStats(ctx, statRange)
@@ -133,4 +133,21 @@ func (s *service) PutFunds(ctx context.Context, payment *models.PaymentReq) erro
 func monthStart(now time.Time) time.Time {
 	year, month, location := now.Year(), now.Month(), now.Location()
 	return time.Date(year, month, 1, 0, 0, 0, 0, location)
+}
+
+func monthEnd(now time.Time) time.Time {
+	var lastDay int
+	year, month, location := now.Year(), now.Month(), now.Location()
+
+	if month == 2 && (year%4 == 0 && year%100 != 0) || (year%400 == 0) {
+		lastDay = 29
+	} else if month == 2 {
+		lastDay = 28
+	} else if month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12 {
+		lastDay = 31
+	} else {
+		lastDay = 30
+	}
+
+	return time.Date(year, month, lastDay, 23, 59, 59, int(time.Second-time.Nanosecond), location)
 }

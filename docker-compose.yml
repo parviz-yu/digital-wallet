@@ -1,0 +1,57 @@
+version: '3.9'
+
+services:
+  backend:
+    build: .
+    container_name: digital-wallet-api
+    restart: always
+    expose:
+      - 8080
+    environment:
+      ENV: ${ENV}
+      SECRET_TOKEN: ${SECRET_TOKEN}
+      SERVER_HOST: ${SERVER_HOST}
+      SERVER_TIMEOUT: ${SERVER_TIMEOUT}
+      SERVER_IDLETIMEOUT: ${SERVER_IDLETIMEOUT}
+      POSTGRES_HOST: db
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DATABASE: ${POSTGRES_DATABASE}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  proxy:
+    image: nginx:1.25.3
+    container_name: digital-wallet-proxy
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - backend
+      - db
+
+  db:
+      image: postgres:15.5-bookworm
+      container_name: digital-wallet-db
+      expose:
+        - 5432
+      volumes:
+        - ./initdb:/docker-entrypoint-initdb.d
+        - db-data:/var/lib/postgresql/data
+      environment:
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        POSTGRES_USER: ${POSTGRES_USER}
+        POSTGRES_DB: ${POSTGRES_DATABASE}
+        PGUSER: "${POSTGRES_USER}"
+      healthcheck:
+        test: [ "CMD-SHELL", "pg_isready" ]
+        interval: 10s
+        timeout: 5s
+        retries: 10
+
+volumes:
+  db-data:
